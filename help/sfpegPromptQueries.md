@@ -46,6 +46,8 @@ component in a standard Lightning record page (`Contact`) providing
 recommendations relative to the current record based on the output of
 an **AI Prompt** leveraging a **RAG** index.
 
+![Prompt Results](/media/sfpegPromptQueries.png)
+
 For this result, the **sfpegList** metadata record should be configured as follows:
 * `Scope`set to `Contact`
 * `Query Type`set to `Apex`

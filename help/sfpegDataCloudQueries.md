@@ -37,6 +37,8 @@ The following example shows a **[sfpegListCmp](/help/sfpegListCmp.md)** in a
 standard Lightning App page (`DMO Lists`) listing the latest records created 
 in the Account DMO.
 
+![DataCloud Queries](/media/sfpegDataCloudQueries.png)
+
 For this result, the **sfpegList** metadata record should be configured as follows:
 * `Scope`set to `GLOBAL`
 * `Query Type`set to `Apex`

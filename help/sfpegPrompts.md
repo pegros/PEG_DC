@@ -45,6 +45,8 @@ The following example shows 2 **[sfpegListCmp](/help/sfpegListCmp.md)**
 components in a standard Lightning App page (`Prompt Templates`) listing
 respectively the _active_ vs _inactive_ **AI Prompts** of the Org.
 
+![Prompt Lists](/media/sfpegPrompts.png)
+
 For this result, the **sfpegList** metadata record should be configured as follows:
 * `Scope`set to `GLOBAL`
 * `Query Type`set to `Apex`
