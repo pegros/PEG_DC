@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>sfpegTestPromptQueriesOK</label>
+    <protected>false</protected>
+    <values>
+        <field>BypassEscaping__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+    <values>
+        <field>BypassFLS__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+    <values>
+        <field>BypassSharing__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+    <values>
+        <field>Description__c</field>
+        <value xsi:type="xsd:string">Test configuration for the sfpegPromptQueries_TST test class</value>
+    </values>
+    <values>
+        <field>DisplayConfig__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>DisplayType__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>DoPagination__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+    <values>
+        <field>FlattenResults__c</field>
+        <value xsi:type="xsd:boolean">false</value>
+    </values>
+    <values>
+        <field>Permission__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>QueryClass__c</field>
+        <value xsi:type="xsd:string">sfpegPromptQueries_SVC</value>
+    </values>
+    <values>
+        <field>QueryCount__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>QueryInput__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>QueryOrderBy__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>QueryOrder__c</field>
+        <value xsi:type="xsd:string">ASC</value>
+    </values>
+    <values>
+        <field>QuerySOQL__c</field>
+        <value xsi:type="xsd:string">{
+&quot;promptDevName&quot;:&quot;PROMPT&quot;,
+&quot;promptInput&quot;: {
+&quot;additional​Config&quot;:{
+&quot;application​Name&quot;:&quot;PromptTemplateGenerationsInvocable&quot;
+},
+&quot;inputParams&quot;:{
+&quot;Input:Candidate&quot;:{&quot;id&quot;:&quot;003S900001GzmO0IAJ&quot;}
+},
+&quot;citationMode&quot;:&quot;off&quot;,
+&quot;isPreview&quot;:false,
+&quot;outputLanguage&quot;:&quot;English&quot;
+},
+&quot;outputMode&quot;:&quot;JSON&quot;
+}</value>
+    </values>
+    <values>
+        <field>QueryType__c</field>
+        <value xsi:type="xsd:string">Apex</value>
+    </values>
+    <values>
+        <field>RowActions__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>Scope__c</field>
+        <value xsi:nil="true"/>
+    </values>
+</CustomMetadata>

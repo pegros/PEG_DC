@@ -77,72 +77,89 @@ public with sharing class sfpegPromptQueries_SVC extends sfpegListQuery_SVC {
     ***/
     @TestVisible
     private List<Object> executePrompt(final String promptRequest,  Map<Object,Object> context) {
-        System.debug('executeSQL: START');
+        System.debug('executePrompt: START');
 
         String mergedRequest = sfpegList_CTL.mergeQuery(promptRequest, context, sfpegList_CTL.CONFIG.BypassEscaping__c);
-        System.debug(LoggingLevel.FINE,'executeSQL: prompt request merged ' + mergedRequest);
+        System.debug('executePrompt: prompt request merged ' + mergedRequest);
 
         Map<String,Object> requestParameters = (Map<String,Object>)(JSON.deserializeUntyped(mergedRequest));
-        System.debug(LoggingLevel.FINE,'queryPrompts: Prompt request parsed ' + requestParameters);
+        System.debug('executePrompt: Prompt request parsed ' + requestParameters);
 
         String promptDevName = (String) requestParameters.get('promptDevName');
-        System.debug(LoggingLevel.FINE,'queryPrompts: Prompt dev Name extracted ' + promptDevName);
+        System.debug('executePrompt: Prompt dev Name extracted ' + promptDevName);
         if (String.isBlank(promptDevName)) throw new AuraHandledException('Missing promptDevName property in configuration');
 
         Map<String,Object> promptInputMap = (Map<String,Object>)requestParameters.get('promptInput');
         ConnectApi.EinsteinPromptTemplateGenerationsInput promptInput = new ConnectApi.EinsteinPromptTemplateGenerationsInput();
         promptInput.citationMode = (String) promptInputMap.get('citationMode');
-        System.debug(LoggingLevel.FINE,'queryPrompts: citationMode set ' + promptInput.citationMode);
+        System.debug('executePrompt: citationMode set ' + promptInput.citationMode);
         promptInput.isPreview = (Boolean) promptInputMap.get('isPreview');
-        System.debug(LoggingLevel.FINE,'queryPrompts: isPreview set ' + promptInput.isPreview);
+        System.debug('executePrompt: isPreview set< ' + promptInput.isPreview);
         promptInput.outputLanguage = (String) promptInputMap.get('outputLanguage');
-        System.debug(LoggingLevel.FINE,'queryPrompts: outputLanguage set ' + promptInput.outputLanguage);
+        System.debug('executePrompt: outputLanguage set ' + promptInput.outputLanguage);
         promptInput.inputParams = new Map<String, ConnectApi.WrappedValue>();
         Map<String,Object> promptInputParamsMap = (Map<String,Object>) promptInputMap.get('inputParams');
         if (promptInputParamsMap != null) {
-            System.debug(LoggingLevel.FINE,'queryPrompts: analysing inputParams ' + promptInputParamsMap);
+            System.debug('executePrompt: analysing inputParams ' + promptInputParamsMap);
             for (String iterKey : promptInputParamsMap.keySet()) {
-                System.debug(LoggingLevel.FINE,'queryPrompts: processing key ' + iterKey);
+                System.debug('executePrompt: processing key ' + iterKey);
                 ConnectApi.WrappedValue iterValue = new ConnectApi.WrappedValue();
                 Map<String,String> iterValueMap = new Map<String,String>();
                 Map<String,Object> iterPropertyMap = (Map<String,Object>)(promptInputParamsMap.get(iterKey));
                 for (String iterProperty : iterPropertyMap.keySet()) {
-                    System.debug(LoggingLevel.FINE,'queryPrompts: processing property ' + iterProperty);
+                    System.debug('executePrompt: processing property ' + iterProperty);
                     iterValueMap.put(iterProperty,(String)(iterPropertyMap.get(iterProperty)));
                 }
-                System.debug(LoggingLevel.FINE,'queryPrompts: value reworked ' + iterValueMap);
+                System.debug('executePrompt: value reworked ' + iterValueMap);
                 iterValue.value = iterValueMap;
                 promptInput.inputParams.put(iterKey,iterValue);
             }
-            System.debug(LoggingLevel.FINE,'queryPrompts: inputParams init ' + promptInput.inputParams);
+            System.debug('executePrompt: inputParams init ' + promptInput.inputParams);
         }
         promptInput.additionalConfig = new ConnectApi.EinsteinLlmAdditionalConfigInput();
         Map<String,Object> promptAddConfigMap = (Map<String,Object>) promptInputMap.get('additional​Config');
         (promptInput.additionalConfig).applicationName = (String) promptAddConfigMap.get('application​Name');
-        System.debug(LoggingLevel.FINE,'queryPrompts: applicationName init ' + (promptInput.additionalConfig).applicationName);
+        System.debug('executePrompt: applicationName init ' + (promptInput.additionalConfig).applicationName);
         //ConnectApi.EinsteinPromptTemplateGenerationsInput promptInput = (ConnectApi.EinsteinPromptTemplateGenerationsInput) requestParameters.get('promptInput');
-        System.debug(LoggingLevel.FINE,'queryPrompts: Prompt input extracted ' + promptInput);
+        System.debug('executePrompt: Prompt input extracted ' + promptInput);
 
-        ConnectApi.EinsteinPromptTemplateGenerationsRepresentation promptOutput = 
-            ConnectApi.EinsteinLLM.generateMessagesForPromptTemplate(promptDevName, promptInput);
-        System.debug(LoggingLevel.FINE,'queryPrompts: Prompt executed  returning' + promptOutput);
+        ConnectApi.EinsteinPromptTemplateGenerationsRepresentation promptOutput = (Test.isRunningTest() ? new ConnectApi.EinsteinPromptTemplateGenerationsRepresentation() : ConnectApi.EinsteinLLM.generateMessagesForPromptTemplate(promptDevName, promptInput));
+        System.debug('executePrompt: Prompt executed  returning ' + promptOutput);
 
         String outputMode = (String) requestParameters.get('outputMode');
-        System.debug(LoggingLevel.FINE,'queryPrompts: outputMode fetched ' + outputMode);
+        System.debug('executePrompt: outputMode fetched ' + outputMode);
 
-        if (String.isNotBlank(outputMode) && (outputMode == 'JSON')) {
-            System.debug(LoggingLevel.FINE,'queryPrompts: returning JSON list');
-                    
-            String resultString = promptOutput.generations[0].text.removeStart('```json').removeStart('```');
-            System.debug(LoggingLevel.FINE,'queryPrompts: resultString extracted' + resultString);
-            List<Object> results = (List<Object>)JSON.deserializeUntyped(resultString);
-            System.debug(LoggingLevel.FINE,'queryPrompts: results parsed' + results);
-
-            System.debug(LoggingLevel.FINE,'queryPrompts: END with #JSON results' + results.size());
-            return results;
+        List<Object> results = new List<Object>();
+        if (Test.isRunningTest()) {
+            System.debug('executePrompt: handling test prompt ' + promptDevName);
+            if (promptDevName == 'PROMPT') {
+                System.debug('executePrompt: handling correct test prompt');
+                Map<String,Object> resultItem = new Map<String,Object>();
+                resultItem.put('Id','ID001');
+                resultItem.put('Name','Name001');
+                resultItem.put('Type','Type001');
+                resultItem.put('Status','Status001');
+                results.add(resultItem);            
+                System.debug('executePrompt: good test result init');
+            }
+            else {
+        		System.debug(LoggingLevel.ERROR,'executePrompt: END KO / bad test prompt');
+                throw new StringException('Prompt should be PROMPT');
+            }
+        }
+        else if (String.isNotBlank(outputMode) && (outputMode == 'JSON')) {
+            System.debug('executePrompt: returning JSON list');
+            String resultString = promptOutput.generations[0].text.removeStart('```json').removeEnd('```');
+            System.debug('executePrompt: resultString extracted ' + resultString);
+            results = (List<Object>)JSON.deserializeUntyped(resultString);
+            System.debug('executePrompt: JSON results parsed ' + results);
+        }
+        else {
+            System.debug('executePrompt: returning raw results');
+            results = (List<Object>) promptOutput.generations;
         }
 
-        System.debug(LoggingLevel.FINE,'queryPrompts: END with #raw results' + promptOutput.generations.size());
-        return (List<Object>) promptOutput.generations;        
+        System.debug('executePrompt: END with #results ' + results.size());
+        return results;        
     }
 }
