@@ -91,7 +91,7 @@ public with sharing class sfpegDataCloudQueries_SVC extends sfpegListQuery_SVC {
         List<Object> results = new List<Object>();
         if (Test.isRunningTest()) {
             if (queryConfig.startsWith('SELECT')) {
-                System.debug(LoggingLevel.ERROR,'executeSQL: returning test result');
+                System.debug(LoggingLevel.FINE,'executeSQL: returning test result');
                 Map<String,Object> resultItem = new Map<String,Object>();
                 resultItem.put('Id','ID001');
                 resultItem.put('Name','Name001');
