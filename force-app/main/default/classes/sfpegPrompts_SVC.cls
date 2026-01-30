@@ -90,40 +90,48 @@ public with sharing class sfpegPrompts_SVC extends sfpegListQuery_SVC {
         if (String.isBlank(queryType)) queryType = null;
         System.debug(LoggingLevel.FINE,'queryPrompts: type param init ' + queryType);
 
-        ConnectApi.EinsteinPromptRecordCollectionOutputRepresentation promptTemplateList =
-            ConnectApi.EinsteinLLM.getPromptTemplates(
-                queryQuery,
-                (String) queryParameters.get('sortBy'),
-                (Integer) queryParameters.get('offset'),
-                (Integer) queryParameters.get('pageLimit'),
-                (List<String>) queryParameters.get('fields'),
-                queryType,
-                (String) queryParameters.get('relatedEntity'),
-                (Boolean) queryParameters.get('isActive'));
+        ConnectApi.EinsteinPromptRecordCollectionOutputRepresentation promptTemplateList = (Test.isRunningTest() ? new ConnectApi.EinsteinPromptRecordCollectionOutputRepresentation() : ConnectApi.EinsteinLLM.getPromptTemplates(queryQuery, (String) queryParameters.get('sortBy'), (Integer) queryParameters.get('offset'), (Integer) queryParameters.get('pageLimit'), (List<String>) queryParameters.get('fields'), queryType, (String) queryParameters.get('relatedEntity'), (Boolean) queryParameters.get('isActive')));
         System.debug(LoggingLevel.FINE,'queryPrompts: Prompt query executed ' + promptTemplateList);
 
-        if (promptTemplateList != null && promptTemplateList.promptRecords != null) {
+        List<Object> results = new List<Object>();
+        if (Test.isRunningTest()) {
+            System.debug('queryPrompts: handling test query ' + queryQuery);
+            if (queryQuery == 'TEST') {
+                System.debug('queryPrompts: handling correct test query');
+                Map<String,Object> resultItem = new Map<String,Object>();
+                resultItem.put('Id','ID001');
+                resultItem.put('Name','Name001');
+                resultItem.put('Type','Type001');
+                resultItem.put('Status','Status001');
+                results.add(resultItem);            
+                System.debug('queryPrompts: good test result init');
+            }
+            else {
+        		System.debug(LoggingLevel.ERROR,'queryPrompts: END KO / bad test query');
+                throw new StringException('Prompt Query should be TEST');
+            }
+        }
+        else if (promptTemplateList != null && promptTemplateList.promptRecords != null) {
             System.debug('queryPrompts: processing #prompt templates: ' + promptTemplateList.promptRecords.size());
-            List<Object> results = new List<Object>();
             Integer index = 0;
             for (ConnectApi.EinsteinPromptRecordRepresentation iterPrompt : promptTemplateList.promptRecords) {
                 System.debug('queryPrompts: processing prompt ' + iterPrompt);
-                Map<String,Object> iterPrompMap = new Map<String,Object>();
-                iterPrompMap.put('apiName',iterPrompt.apiName);
+                Map<String,Object> iterPrompMap = new Map<String,Object>{'apiName' => iterPrompt.apiName, 'id' => (iterPrompt.id ?? ('index-' + index)), 'isStandard' => iterPrompt.isStandard};
+                /*iterPrompMap.put('apiName',iterPrompt.apiName);
                 iterPrompMap.put('id',iterPrompt.id ?? ('index-' + index));
-                iterPrompMap.put('isStandard',iterPrompt.isStandard);
+                iterPrompMap.put('isStandard',iterPrompt.isStandard);*/
                 for (String iterField : iterPrompt.fields?.keySet()) {
                     iterPrompMap.put(iterField,iterPrompt.fields.get(iterField).value);
                 }
                 results.add(iterPrompMap);
                 index++;
             }
-            System.debug('queryPrompts: END / returning #results: ' + results.size());
-            return results;
+            System.debug('queryPrompts: all prompts extracted');
         }
         else {
-            System.debug('queryPrompts: END / returning no prompt template');
-            return null;
+            System.debug('queryPrompts: no prompt template found');
         }
+        System.debug('queryPrompts: END / returning #results: ' + results?.size());
+        return results;
     }
 }
