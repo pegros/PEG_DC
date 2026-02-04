@@ -92,3 +92,11 @@ from the **[PEG_LIST](https://github.com/pegros/PEG_LIST)** package to the **PEG
 for easier deployment
 * Addition of the **[sfpegPromptQueries_SVC](/help/sfpegPromptQueries.md)** and 
 **[sfpegPrompts_SVC](/help/sfpegPrompts.md)** Apex classes
+
+### Feb 2026
+
+Changes done:
+* Added new `ESC_SINGLE(((...)))` rework function in the 
+**[sfpegDataCloudQueries_SVC](/help/sfpegDataCloudQueries.md)** Apex class
+to handle cases where single quotes need to be escaped properly in Data Cloud SQL queries (e.g. for Semantic Search).
+

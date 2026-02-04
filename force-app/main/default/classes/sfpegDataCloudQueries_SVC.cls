@@ -79,6 +79,28 @@ public with sharing class sfpegDataCloudQueries_SVC extends sfpegListQuery_SVC {
         String mergedQuery = sfpegList_CTL.mergeQuery(queryConfig, context, sfpegList_CTL.CONFIG.BypassEscaping__c);
         System.debug(LoggingLevel.FINE,'executeSQL: SQL query merged ' + mergedQuery);
 
+        if (mergedQuery.contains('ESC_SINGLE(((')) {
+			System.debug(LoggingLevel.FINEST,'executeSQL: reworking ESC_SINGLE');
+			Pattern quotePattern = Pattern.compile('ESC_SINGLE\\(\\(\\(([\\s\\S]*?)\\)\\)\\)');
+			Matcher quoteMatcher = quotePattern.matcher(mergedQuery);
+			String targetQuery = mergedQuery;
+			while(quoteMatcher.find()) {
+				System.debug(LoggingLevel.FINEST,'executeSQL: processing match ' + quoteMatcher.group(0));
+				System.debug(LoggingLevel.FINEST,'executeSQL: with value ' + quoteMatcher.group(1));
+
+                //String newMatchValue = (quoteMatcher.group(1)).replace('\'','\'\'');
+                String newMatchValue = (quoteMatcher.group(1)).replaceAll('(\\\\\\\'|\')', '\'\'');
+                System.debug(LoggingLevel.FINEST,'executeSQL: with value ' + newMatchValue);
+
+                targetQuery = targetQuery.replace(quoteMatcher.group(0), newMatchValue);
+                System.debug(LoggingLevel.FINEST,'executeSQL: targetQuery merged ' + targetQuery);
+			}
+			mergedQuery = targetQuery;
+		}
+		else {
+			System.debug(LoggingLevel.FINEST,'executeSQL: No ESC_SINGLE to rework');
+		}
+
         ConnectApi.CdpQueryInput queryRequest = new ConnectApi.CdpQueryInput();
         queryRequest.sql = mergedQuery;
         System.debug(LoggingLevel.FINE,'executeSQL: SQL request prepared ' + queryRequest);

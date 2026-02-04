@@ -78,19 +78,12 @@ public class  sfpegDataCloudQueries_TST {
 	static void testGetData() {
 		System.debug('testGetData: ##### START #####');
 
-        /*List<sfpegTestObject__c> rcdList = new List<sfpegTestObject__c>();
-		rcdList.add(new sfpegTestObject__c(Name='Test 1',Picklist__c='P1',MultiPicklist__c='MP1'));
-        rcdList.add(new sfpegTestObject__c(Name='Test 2',Picklist__c='P1',MultiPicklist__c='MP2'));
-		rcdList.add(new sfpegTestObject__c(Name='Test 3',Picklist__c='P1',MultiPicklist__c='MP1'));
-		rcdList.add(new sfpegTestObject__c(Name='Test 4',Picklist__c='P2',MultiPicklist__c='MP3'));
-		rcdList.add(new sfpegTestObject__c(Name='Test 6',Picklist__c='P2',MultiPicklist__c='MP1'));
-        insert rcdList;
-		System.debug('testGetData: test records inserted ' + rcdList);*/
+        
 
 		Test.startTest();
 
 		// Testing Passing Cases
-        Map<Object,Object> inputData = new Map<Object,Object>{'NAME' => 'Test 1', 'PL' => 'P1', 'MPL' => 'MP1'};
+        Map<Object,Object> inputData = new Map<Object,Object>{'NAME' => 'Test \'1\'', 'PL' => 'P1', 'MPL' => 'MP1'};
 		System.debug('testGetData: inputData init ' + inputData);
 
         System.debug('testGetData: ##### TEST 1 - Correct query #####');

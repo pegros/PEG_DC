@@ -69,6 +69,49 @@ SELECT ssot__Id__c, ssot__Name__c, ssot__DataSourceId__c, Global_Account_Parent_
 }
 ```
 
+### Single Quotes Escaping
+
+To handle cases where single quotes (`'`) need to be escaped as two single quotes
+(`''`) in the Data Cloud SQL queries, the `ESC_SINGLE(((xxx)))` directive may be
+applied before sending the merged query to Data Cloud.
+
+If you have the `NAME` context parameter with `Henry O'Maley` value, the following
+SQL query 
+```
+SELECT ssot__Id__c, ssot__Name__c, ssot__DataSourceId__c
+FROM ssot__Account__dlm
+WHERE Names__c = '{{{NAME}}}'
+```
+is merged as 
+```
+SELECT ssot__Id__c, ssot__Name__c, ssot__DataSourceId__c
+FROM ssot__Account__dlm
+WHERE Names__c = 'Henry O\'Maley'
+```
+if you keep the `Bypass Escaping?` option uncheked 
+(which will probably return no result) or 
+```
+SELECT ssot__Id__c, ssot__Name__c, ssot__DataSourceId__c
+FROM ssot__Account__dlm
+WHERE Names__c = 'Henry O'Maley'
+```
+otherwise (which will raise a malformed SQL query exception). 
+
+By using the `ESC_SINGLE(((xxx)))` directive in the SQL query
+```
+SELECT ssot__Id__c, ssot__Name__c, ssot__DataSourceId__c
+FROM ssot__Account__dlm
+WHERE Names__c = 'ESC_SINGLE((({{{NAME}}})))'
+```
+the merged result will be 
+```
+SELECT ssot__Id__c, ssot__Name__c, ssot__DataSourceId__c
+FROM ssot__Account__dlm
+WHERE Names__c = 'Henry O''Maley'
+```
+whatever the `Bypass Escaping?` option selected.
+
+
 ## Technical Details
 
 This class implements only the `getData()` method of the **sfpegListQuery_SVC** interface class. 

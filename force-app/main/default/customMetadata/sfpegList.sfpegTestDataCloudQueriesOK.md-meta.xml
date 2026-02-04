@@ -60,7 +60,7 @@
     </values>
     <values>
         <field>QuerySOQL__c</field>
-        <value xsi:type="xsd:string">SELECT ssot__Id__c, ssot__Name__c, ssot__DataSourceId__c FROM ssot__Account__dlm LIMIT 10</value>
+        <value xsi:type="xsd:string">SELECT ssot__Id__c, ssot__Name__c, ssot__DataSourceId__c FROM ssot__Account__dlm WHERE Names__c = &apos;ESC_SINGLE((({{{NAME}}})))&apos; LIMIT 10</value>
     </values>
     <values>
         <field>QueryType__c</field>
