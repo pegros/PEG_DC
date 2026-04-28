@@ -43,6 +43,8 @@ package should be installed on your Org.
 ℹ️ As the **ConnectApi** Apex class induces multiple implicit dependencies requiring **Data Cloud**
 specific features on scratch Orgs, it is currently impossible to distribute the content of this
 repository as an **unlocked package** (as for **[PEG_LIST](https://github.com/pegros/PEG_LIST)**).
+Therefore **DataCloud** and **AgentForce** should be active on your Org when you deploy these
+components.
 
 The following two options are therefore available for package installation:
 * **Git** and **SF CLI** Deployment
@@ -50,6 +52,7 @@ The following two options are therefore available for package installation:
 
 ⚠️ Pay attention to also grant users with the proper **Data Cloud** and / or **Agent AI** specific
 permissions to be able to access **Data Cloud** data and / or invoke **AI Prompts**.
+
 
 
 ### **Git** and **SF CLI** Deployment
