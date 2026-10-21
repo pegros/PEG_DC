@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MaxRows__c</fullName>
+    <defaultValue>1000</defaultValue>
+    <description>Row cap for a single query. May only LOWER the effective cap: the controller clamps this to a hard ceiling of 10000, so values above 10000 have no effect (anti-mass-export). Iteration stops once the running row count reaches the effective cap and flags the result as truncated. Default 10000 when unset.</description>
+    <externalId>false</externalId>
+    <label>Max Rows</label>
+    <precision>9</precision>
+    <required>false</required>
+    <scale>0</scale>
+    <trackTrending>false</trackTrending>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,20 @@
+<template>
+    <div class="cellValue slds-truncate" onclick={handleClick}>
+        <template lwc:if={isNumber}>
+            <lightning-formatted-number value={value}></lightning-formatted-number>
+        </template>
+        <template lwc:elseif={isDate}>
+            <!-- UTC display avoids any day shift due to timezone conversion of 'YYYY-MM-DD' values -->
+            <lightning-formatted-date-time  value={value}
+                                            time-zone="UTC">
+            </lightning-formatted-date-time>
+        </template>
+        <template lwc:elseif={isDatetime}>
+            <lightning-formatted-date-time  value={value}
+                                            year="numeric" month="2-digit" day="2-digit"
+                                            hour="2-digit" minute="2-digit" second="2-digit">
+            </lightning-formatted-date-time>
+        </template>
+        <template lwc:else>{textValue}</template>
+    </div>
+</template>

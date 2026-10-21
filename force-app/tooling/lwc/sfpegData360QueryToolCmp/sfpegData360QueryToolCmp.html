@@ -1,0 +1,283 @@
+<template>
+    <div>
+        <div class="slds-m-bottom_medium">
+        <lightning-card lwc:ref="queryCard"
+                        title={queryCardLabel}
+                        icon-name="standard:query_editor">
+            <div    slot="actions"
+                    class="slds-var-p-vertical_xxx-small">
+                <template lwc:if={isCollapsed}>
+                    <lightning-button   class="slds-var-m-right_x-small"
+                                        label={queryButtonLabel}
+                                        variant="brand"
+                                        name="queryButton"
+                                        lwc:ref="queryButton"
+                                        title={queryButtonTitle}
+                                        icon-name="utility:enter"
+                                        icon-position="right"
+                                        disabled={isRunning}
+                                        onclick={handleQueryButtonClick}>
+                    </lightning-button>
+                </template>
+
+                <lightning-button-icon-stateful variant="brand"
+                                                size="medium"
+                                                selected={isCollapsed}
+                                                icon-name={expandCollapseIcon}
+                                                onclick={handleExpandCollapse}>
+                </lightning-button-icon-stateful>
+            </div>
+
+            <template lwc:if={isCollapsed}></template>
+            <template lwc:else>
+                <div class="slds-var-p-horizontal_medium">
+                    <!-- DataSpace on the left and saved query selector on the right, stacked on narrow screens -->
+                    <lightning-layout multiple-rows pull-to-boundary="small">
+                        <lightning-layout-item  size="12" medium-device-size="6"
+                                                padding="horizontal-small"
+                                                class="slds-var-p-bottom_small">
+                            <div class="slds-grid slds-grid_vertical-align-end">
+                                <lightning-combobox class="slds-col slds-grow slds-var-m-right_x-small"
+                                                    label={savedQueryLabel}
+                                                    name="savedQuery"
+                                                    value={selectedQueryName}
+                                                    options={savedQueryOptions}
+                                                    placeholder="Select a saved query"
+                                                    onchange={handleSavedQuerySelect}>
+                                </lightning-combobox>
+                                <lightning-button-group class="slds-no-flex">
+                                    <lightning-button-icon  variant="border-filled"
+                                                            name="saveQuery"
+                                                            title={saveQueryTitle}
+                                                            alternative-text={saveQueryTitle}
+                                                            icon-name="utility:save"
+                                                            disabled={isSaveDisabled}
+                                                            onclick={handleSaveQueryClick} >
+                                    </lightning-button-icon>
+                                    <lightning-button-icon  variant="border-filled"
+                                                            name="deleteQuery"
+                                                            title={deleteQueryTitle}
+                                                            alternative-text={deleteQueryTitle}
+                                                            icon-name="utility:delete"
+                                                            disabled={isDeleteDisabled}
+                                                            onclick={handleDeleteQueryClick} >
+                                    </lightning-button-icon>
+                                    <lightning-button-icon  variant="border-filled"
+                                                            name="downloadQueries"
+                                                            title={downloadQueriesTitle}
+                                                            alternative-text={downloadQueriesTitle}
+                                                            icon-name="utility:download"
+                                                            disabled={isDownloadQueriesDisabled}
+                                                            onclick={handleDownloadQueriesClick} >
+                                    </lightning-button-icon>
+                                    <lightning-button-icon  variant="border-filled"
+                                                            name="uploadQueries"
+                                                            title={uploadQueriesTitle}
+                                                            alternative-text={uploadQueriesTitle}
+                                                            icon-name="utility:upload"
+                                                            onclick={handleUploadQueriesClick} >
+                                    </lightning-button-icon>
+                                </lightning-button-group>
+                                <!-- hidden file input opened by the upload button -->
+                                <input  type="file"
+                                        accept=".json,application/json"
+                                        class="slds-hide"
+                                        lwc:ref="queriesFileInput"
+                                        onchange={handleQueriesFileChange} />
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item  size="12" medium-device-size="6"
+                                                padding="horizontal-small"
+                                                class="slds-var-p-bottom_small">
+                            <lightning-combobox label="DataSpace"
+                                                name="dataSpace"
+                                                value={dataSpace}
+                                                options={dataSpaceOptions}
+                                                placeholder="Select a DataSpace"
+                                                onchange={handleDataSpaceChange}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                    <lightning-textarea label="SQL"
+                                        name="sqlQuery"
+                                        class="sqlInput"
+                                        value={sqlQuery}
+                                        placeholder="SELECT ... FROM ... LIMIT 100"
+                                        onchange={handleSqlChange}>
+                    </lightning-textarea>
+                </div>
+                <div class="slds-align_absolute-center slds-var-p-top_small">
+                   <lightning-button    label={queryButtonLabel}
+                                        variant="brand"
+                                        name="queryButton"
+                                        lwc:ref="queryButton"
+                                        title={queryButtonTitle}
+                                        icon-name="utility:enter"
+                                        icon-position="right"
+                                        disabled={isRunning}
+                                        onclick={handleQueryButtonClick}>
+                    </lightning-button>
+                </div>
+            </template>
+
+            <template lwc:if={isDebug}>
+                <p slot="footer">Current #Saved queries: {savedQueryOptions.length}</p>
+            </template>
+        </lightning-card>   
+        </div>
+
+        <template lwc:if={isRunning}>
+            <lightning-spinner alternative-text="Running query" size="medium"></lightning-spinner>
+        </template>
+
+        <template lwc:if={hasResults}>
+            <div class="slds-card-wrapperNNNN">
+            <lightning-card lwc:ref="resultCard"
+                            title={resultCardTitle}
+                            icon-name="standard:table">
+                
+                <template lwc:if={hasError}>
+                    <div    class="slds-media slds-media_center slds-var-p-horizontal_medium slds-var-m-bottom_small">
+                        <div    class="slds-media__figure">
+                            <lightning-icon icon-name="utility:error"
+                                            size="x-small"
+                                            variant="error">
+                            </lightning-icon>
+                        </div>
+                        <div class="slds-media__body slds-text-color_error" style="word-wrap: break-word !important;">
+                            {errorMessage}
+                        </div>
+                    </div>
+                </template>
+
+                <template lwc:else>
+                    <div    slot="actions"
+                            class="slds-var-p-vertical_xxx-small slds-grid slds-grid_vertical-align-center">
+                        <lightning-input    type="search"
+                                            class="slds-var-m-right_x-small"
+                                            label="Filter results"
+                                            variant="label-hidden"
+                                            placeholder={searchPlaceholder}
+                                            value={searchString}
+                                            onchange={handleSearchChange}>
+                        </lightning-input>
+                        <lightning-button-group>
+                            <lightning-button-menu  variant="border"
+                                                    label={formatLabel}
+                                                    alternative-text={formatButtonTitle}
+                                                    title={formatButtonTitle}
+                                                    menu-alignment="right"
+                                                    onselect={handleFormatSelect} >
+                                <template for:each={formatOptions} for:item="item">
+                                    <lightning-menu-item    key={item.value}
+                                                            value={item.value}
+                                                            label={item.label}
+                                                            checked={item.checked}>
+                                    </lightning-menu-item>
+                                </template>
+                            </lightning-button-menu>
+                            <lightning-button-icon  size="medium"
+                                                    variant="brand"
+                                                    name="copyButton"
+                                                    title={copyTitle}
+                                                    icon-name="utility:copy_to_clipboard"
+                                                    onclick={handleCopyButtonClick} >
+                            </lightning-button-icon>
+                            <lightning-button-icon  size="medium"
+                                                    variant="brand"
+                                                    name="exportButton"
+                                                    title={exportTitle}
+                                                    icon-name="utility:download"
+                                                    icon-position="left"
+                                                    onclick={handleExportButtonClick} >
+                            </lightning-button-icon>
+                        </lightning-button-group>
+                    </div>
+
+                    <template lwc:if={isMaskingApplied}>
+                        <div    class="slds-media slds-media_center slds-var-p-horizontal_medium slds-var-m-bottom_medium">
+                            <div    class="slds-media__figure">
+                                <lightning-icon icon-name="utility:warning"
+                                                size="x-small"
+                                                variant="warning">
+                                </lightning-icon>
+                            </div>
+                            <div class="slds-media__body" style="word-wrap: break-word !important;">
+                                {maskingAppliedWarning}
+                            </div>
+                        </div>
+                    </template>
+                    <template lwc:if={isTruncated}>
+                        <div    class="slds-media slds-media_center slds-var-p-horizontal_medium slds-var-m-bottom_medium">
+                            <div    class="slds-media__figure">
+                                <lightning-icon icon-name="utility:warning"
+                                                size="x-small"
+                                                variant="warning">
+                                </lightning-icon>
+                            </div>
+                            <div class="slds-media__body" style="word-wrap: break-word !important;">
+                                {truncatedWarning}
+                            </div>
+                        </div>
+                    </template>
+
+                    <!-- keyed single-item iteration: changing the key re-creates the datatable (and resets its scroll to top) -->
+                    <template for:each={tableInstances} for:item="item">
+                        <div key={item.key} style="height: 75vh;">
+                            <c-sfpeg-data360-datatable-cmp  class="sfpegTable"
+                                                            key-field={keyField}
+                                                            data={displayedList}
+                                                            columns={resultColumns}
+                                                            min-column-width="100"
+                                                            sorted-by={sortedBy}
+                                                            sorted-direction={sortedDirection}
+                                                            default-sort-direction="asc"
+                                                            onsort={handleSort}
+                                                            enable-infinite-loading={hasMoreRows}
+                                                            onloadmore={handleLoadMore}
+                                                            hide-checkbox-column="true"
+                                                            oncellinspect={handleCellInspect}>
+                            </c-sfpeg-data360-datatable-cmp>
+                        </div>
+                    </template>
+
+                    <!-- inspection tile displaying the full content of the last clicked cell (sticky at the bottom of the page) -->
+                    <template lwc:if={inspectedCell}>
+                        <div class="inspectTile slds-var-p-horizontal_medium slds-var-p-vertical_small">
+                            <div    class="inspectBox slds-box slds-box_small slds-theme_shade"
+                                    lwc:ref="inspectBox"
+                                    onpointerdown={handleInspectResize}>
+                                <lightning-tile type="media"
+                                                label={inspectedCell.label}
+                                                actions={inspectActions}
+                                                onactiontriggered={handleInspectAction}>
+                                    <!-- drag handle to move the (narrowed) tile left or right -->
+                                    <div    slot="media"
+                                            class="inspectHandle"
+                                            title="Drag to move"
+                                            onpointerdown={handleInspectDragStart}
+                                            onpointermove={handleInspectDragMove}
+                                            onpointerup={handleInspectDragEnd}
+                                            onpointercancel={handleInspectDragEnd}>
+                                        <lightning-icon icon-name="utility:drag_and_drop"
+                                                        size="x-small"
+                                                        alternative-text="Drag to move">
+                                        </lightning-icon>
+                                    </div>
+                                    <pre    class="inspectedValue"
+                                            lwc:ref="inspectedValue">{inspectedContent}</pre>
+                                </lightning-tile>
+                            </div>
+                        </div>
+                    </template>
+                </template>
+
+                <template lwc:if={isDebug}>
+                    <p slot="footer">Current #Rows displayed: {displayedList.length}</p>
+                </template>
+            </lightning-card>
+            </div>
+        </template>
+    </div>
+</template>
+           

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Pattern__c</fullName>
+    <description>Apex-flavored regex matched against each result value. Every match is replaced with Replacement__c. An invalid pattern is skipped (logged) rather than failing the query.</description>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <inlineHelpText>Regex to match sensitive substrings, e.g. \b[A-Z]{2}\d{2}[A-Z0-9]{11,30}\b for IBANs. Invalid patterns are skipped.</inlineHelpText>
+    <label>Pattern</label>
+    <length>255</length>
+    <required>true</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

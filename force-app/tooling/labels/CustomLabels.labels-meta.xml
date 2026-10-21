@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>sfpegData360QueryCardTitle</fullName>
+        <categories>sfpegData360Query</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Data360 Query Card Title</shortDescription>
+        <value>SQL Query Parameters</value>
+    </labels>
+    <labels>
+        <fullName>sfpegData360QueryCardLabel</fullName>
+        <categories>sfpegData360Query</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Data360 Query Card Label</shortDescription>
+        <value>SQL Query</value>
+    </labels>
+    <labels>
+        <fullName>sfpegData360QueryRunButtonLabel</fullName>
+        <categories>sfpegData360Query</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Data360 Query Run Button Label</shortDescription>
+        <value>Run</value>
+    </labels>
+    <labels>
+        <fullName>sfpegData360QueryRunButtonTitle</fullName>
+        <categories>sfpegData360Query</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Data360 Query Run Button Title</shortDescription>
+        <value>Run input query</value>
+    </labels>
+    <labels>
+        <fullName>sfpegData360QueryResultCardLabel</fullName>
+        <categories>sfpegData360Query</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Data360 Query Result Card Label</shortDescription>
+        <value>Query Results</value>
+    </labels>
+    <labels>
+        <fullName>sfpegData360QueryExportButtonTitle</fullName>
+        <categories>sfpegData360Query</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Data360 Query Export Button Title</shortDescription>
+        <value>Download as</value>
+    </labels>
+    <labels>
+        <fullName>sfpegData360QueryCopyButtonTitle</fullName>
+        <categories>sfpegData360Query</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Data360 Query Copy Button Title</shortDescription>
+        <value>Copy to clipboard as</value>
+    </labels>
+    <labels>
+        <fullName>sfpegData360QueryFormatButtonTitle</fullName>
+        <categories>sfpegData360Query</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Data360 Query Format Button Title</shortDescription>
+        <value>Select copy / download format</value>
+    </labels>
+    <labels>
+        <fullName>sfpegData360QuerySearchPlaceholder</fullName>
+        <categories>sfpegData360Query</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Data360 Query Search Placeholder</shortDescription>
+        <value>Filter results...</value>
+    </labels>
+    <labels>
+        <fullName>sfpegData360QuerySavedQueryLabel</fullName>
+        <categories>sfpegData360Query</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Data360 Query Saved Query Label</shortDescription>
+        <value>Saved Queries</value>
+    </labels>
+    <labels>
+        <fullName>sfpegData360QuerySaveQueryTitle</fullName>
+        <categories>sfpegData360Query</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Data360 Query Save Query Title</shortDescription>
+        <value>Save current query</value>
+    </labels>
+    <labels>
+        <fullName>sfpegData360QueryDeleteQueryTitle</fullName>
+        <categories>sfpegData360Query</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Data360 Query Delete Query Title</shortDescription>
+        <value>Delete selected saved query</value>
+    </labels>
+    <labels>
+        <fullName>sfpegData360QueryDownloadQueriesTitle</fullName>
+        <categories>sfpegData360Query</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Data360 Query Download Queries Title</shortDescription>
+        <value>Download saved queries as JSON</value>
+    </labels>
+    <labels>
+        <fullName>sfpegData360QueryUploadQueriesTitle</fullName>
+        <categories>sfpegData360Query</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Data360 Query Upload Queries Title</shortDescription>
+        <value>Upload saved queries from JSON</value>
+    </labels>
+</CustomLabels>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomPermission xmlns="http://soap.sforce.com/2006/04/metadata">
+    <isLicensed>false</isLicensed>
+    <label>Data360 Query Data Masking Bypass</label>
+    <description>Permissions allowing user to see raw data in the results returned by the Data360 query tool, i.e. without any masking.</description>
+</CustomPermission>

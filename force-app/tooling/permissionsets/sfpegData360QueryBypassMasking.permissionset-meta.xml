@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customPermissions>
+        <enabled>true</enabled>
+        <name>sfpegData360QueryBypassMasking</name>
+    </customPermissions>
+    <description>Permission for the SFPEG Data360 Query tool granting masking bypass priviledges for admin users. To be provided in addition to the sfpegData360QueryUser permission set.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>SFPEG Data360 Query Masking Bypass</label>
+</PermissionSet>

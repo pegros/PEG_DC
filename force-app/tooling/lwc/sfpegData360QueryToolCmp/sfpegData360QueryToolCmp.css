@@ -1,0 +1,48 @@
+/* Default height of the SQL query input (still resizable by the user) */
+.sqlInput {
+    --slds-c-textarea-sizing-min-height: 8rem;
+}
+.sfpegTable {
+    --slds-c-button-line-height : 1rem !important;
+    --_slds-c-datatable-radius-border: 0 !important;
+}
+/* Inspection tile kept visible at the bottom of the page while the results card is scrolled
+   (wrapper transparent to let the table appear next to a narrowed tile) */
+.inspectTile {
+    position: sticky;
+    bottom: 0;
+    z-index: 1;
+    pointer-events: none;
+}
+/* Tile resizable by the user in both directions (content max height released when resizing,
+   see handleInspectResize and fitInspectedValue) */
+.inspectBox {
+    pointer-events: auto;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.16);
+    overflow: hidden;
+    resize: both;
+    min-width: 15rem;
+    max-width: 100%;
+    min-height: 5rem;
+    max-height: 80vh;
+}
+/* Tile drag handle (touch gestures disabled to allow dragging on touch screens) */
+.inspectHandle {
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+}
+.inspectHandle:active {
+    cursor: grabbing;
+}
+/* Inspected cell value: line breaks / indentation kept, long texts wrapped, scrollable when too long */
+.inspectedValue {
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family: monospace;
+    max-height: 30vh;
+    overflow: auto;
+}
+.inspectBoxResized .inspectedValue {
+    max-height: none;
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Replacement__c</fullName>
+    <description>String each match of Pattern__c is replaced with. Blank is allowed and removes the match. Note: dollar signs and backslashes are treated as literals (regex group references are not honored).</description>
+    <externalId>false</externalId>
+    <fieldManageability>DeveloperControlled</fieldManageability>
+    <inlineHelpText>Text that replaces each match, e.g. [MASKED]. Leave blank to strip the match entirely.</inlineHelpText>
+    <label>Replacement</label>
+    <length>25</length>
+    <required>false</required>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

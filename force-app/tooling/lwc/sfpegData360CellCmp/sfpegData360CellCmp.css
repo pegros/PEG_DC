@@ -1,0 +1,5 @@
+/* Whole cell content clickable (min height keeping empty cells clickable) */
+.cellValue {
+    cursor: pointer;
+    min-height: 1.25rem;
+}
