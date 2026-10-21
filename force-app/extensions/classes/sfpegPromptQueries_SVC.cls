@@ -33,6 +33,7 @@
 * SOFTWARE.
 ***/
 
+@SuppressWarnings('PMD.ClassNamingConventions,PMD.FieldNamingConventions')
 public with sharing class sfpegPromptQueries_SVC extends sfpegListQuery_SVC {
     
     /***

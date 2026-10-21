@@ -1,18 +1,16 @@
 /***
-* @description  Test class for the sfpegPromptQueries_SVC class.
-*               Mirrors the structure and checks used in sfpegDataCloudQueries_TST.
+* @description  Test class for the sfpegDataCloudQueries_SVC class.
 *               Part of the PEG_LIST package extensions.
 * @author       P-E GROS
-* @date         Jan 2026
-* @see          sfpegPromptQueries_SVC
-* @see          sfpegDataCloudQueries_TST
+* @date         Sept 2025
+* @see          sfpegDataCloudQueries_SVC
 * @see          PEG_LIST package (https://github.com/pegros/PEG_LIST)
 *
 * Legal Notice
 *
 * MIT License
 *
-* Copyright (c) 2026 pegros
+* Copyright (c) 2025 pegros
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -33,11 +31,11 @@
 * SOFTWARE.
 ***/
 
+@SuppressWarnings('PMD.ClassNamingConventions,PMD.FieldNamingConventions')
 @isTest
-@SuppressWarnings('PMD.ClassNamingConventions')
-public class sfpegPromptQueries_TST {
+public class  sfpegDataCloudQueries_TST {
 
-    @testSetup
+    @TestSetup
 	static void testSetup() {
 		System.debug('testSetup: START');
 
@@ -69,47 +67,49 @@ public class sfpegPromptQueries_TST {
 		System.debug('testSetup: END');
 	}
 
+
 	/***
-	* @description  Test method for the sfpegPromptQueries_SVC class, checking the "getData" method
-	*               happy path (delegates to executePrompt) and configuration error behaviors.
-	* @see          sfpegPromptQueries_SVC
+	* @description  Test method for the sfpegDataCloudQueries_SVC class, checking the "getData" method
+	*               including all error cases.
+	* @see          sfpegDataCloudQueries_SVC
 	***/
+
 	@IsTest
 	static void testGetData() {
 		System.debug('testGetData: ##### START #####');
 
-        // context used by mergeQuery; keep keys aligned with templates used by sfpegList_CTL
-        Map<Object,Object> inputData = new Map<Object,Object>{};
+        
 
-        Test.startTest();
+		Test.startTest();
 
-        // Happy path: valid configuration should drive execution without throwing.
-        System.debug('testGetData: ##### TEST 1 - Correct prompt execution #####');
-        try {
-            // Assumes a metadata list like sfpegTestPromptQueriesOK exists in the org/package.
-            // Implementation returns List<Object> that may vary (JSON list, ALL, or raw generations).
-            List<Object> outputList = sfpegList_CTL.getData('sfpegTestPromptQueriesOK', (Object)inputData);
-            System.debug('testGetData: returning outputList ' + outputList);
-            Assert.isTrue(true, 'Call should not raise an exception for valid template');
-        }
-        catch (Exception e) {
-            System.debug(LoggingLevel.Error,'testGetData: exception raised when prompt execution is correct ' + e.getMessage());
-            Assert.fail('No exception should be raised when configuration is correct');
-        }
+		// Testing Passing Cases
+        Map<Object,Object> inputData = new Map<Object,Object>{'NAME' => 'Test \'1\'', 'PL' => 'P1', 'MPL' => 'MP1'};
+		System.debug('testGetData: inputData init ' + inputData);
 
-        // Error case: invalid config should raise exception (missing promptDevName, bad JSON, etc.)
-        System.debug('testGetData: ##### TEST 2 - Invalid prompt execution configuration #####');
-        try {
-            sfpegList_CTL.getData('sfpegTestPromptQueriesKO', inputData);
-            System.debug(LoggingLevel.Error,'testGetData: no exception raised for invalid prompt execution template');
-            Assert.fail('An exception should be raised for invalid prompt execution template');
-        }
-        catch (Exception e) {
-            System.debug('testGetData: exception properly raised for invalid prompt execution template ' + e.getMessage());
-            Assert.isTrue(e.getMessage() != null, 'Exception should carry a message');
-        }
+        System.debug('testGetData: ##### TEST 1 - Correct query #####');
+		try {
+			List<Object> outputList = sfpegList_CTL.getData('sfpegTestDataCloudQueriesOK', (Object)inputData);
+			System.debug('testGetData: returning outputList ' + outputList);
+            Assert.areEqual(1,outputList.size(),'1 record should be returned when query is correct');
+		}
+		catch (Exception e) {
+			System.debug(LoggingLevel.Error,'testGetData: exception raised when query is correct ' + e.getMessage());
+			Assert.fail('No exception should be raised when query is correct');
+		}
 
-        Test.stopTest();
-        System.debug('testGetData: ##### END #####');
+		// Error cases
+        System.debug('testGetData: ##### TEST 2 - Invalid query template configuration #####');
+		try {
+			sfpegList_CTL.getData('sfpegTestDataCloudQueriesKO',inputData);
+			System.debug(LoggingLevel.Error,'testGetData: no exception raised for invalid query template');
+			Assert.fail('No exception raised for invalid query template');
+		}
+		catch (Exception e) {
+			System.debug('testGetData: exception properly raised for invalid query template ' + e.getMessage());
+		}
+
+		Test.stopTest();
+		System.debug('testGetData: ##### END #####');
 	}
+
 }

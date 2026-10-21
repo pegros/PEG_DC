@@ -31,8 +31,8 @@
 * SOFTWARE.
 ***/
 
+@SuppressWarnings('PMD.ClassNamingConventions,PMD.FieldNamingConventions')
 @IsTest
-@SuppressWarnings('PMD.ClassNamingConventions')
 public class  sfpegDataCloudQueriesV3_TST {
 
     @testSetup

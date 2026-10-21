@@ -33,11 +33,11 @@
 * SOFTWARE.
 ***/
 
+@SuppressWarnings('PMD.ClassNamingConventions,PMD.FieldNamingConventions')
 @isTest
-@SuppressWarnings('PMD.ClassNamingConventions')
 public class sfpegPrompts_TST {
 
-    @testSetup
+    @TestSetup
 	static void testSetup() {
 		System.debug('testSetup: START');
 
