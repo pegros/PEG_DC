@@ -2,6 +2,8 @@
 
 This component is part of the **[PEG_DC](/README.md)** repository.
 
+ℹ️ It is initially a Lightning rework of a prior tool implemented by my fellow Salesforce colleague O. Lemaire. I thank him for the initial inputs, the idea and his feedbacks. 🙏 
+
 
 ## Introduction
 
