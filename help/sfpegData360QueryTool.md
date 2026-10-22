@@ -91,8 +91,8 @@ The search input in the card header enables to filter the results locally
 
 ### Cell Inspection
 
-Clicking on any cell of the datatable opens an inspection tile, sticky at the bottom of the page,
-displaying the full value of the cell with its column label:
+Clicking on any cell of the datatable opens an inspection tile, sticky at the bottom of the page
+(and overlaying the bottom of the results table), displaying the full value of the cell with its column label:
 * JSON content (objects, arrays or JSON strings) is pretty printed
 * long texts are wrapped instead of being truncated, line breaks being preserved.
 
@@ -101,8 +101,7 @@ Clicking on another cell updates the tile content, clicking on an empty cell clo
 The tile may be:
 * resized (bottom right corner) horizontally and vertically
 * moved left or right via its drag handle (when narrower than the results card)
-* closed or its value copied to the clipboard via its header buttons
-(clicking on the column label also copying the value).
+* closed or its value copied to the clipboard via its header buttons.
 
 Its layout (size and position) is kept when the tile is closed and redisplayed
 (until the page is reloaded).

@@ -6,12 +6,24 @@
     --slds-c-button-line-height : 1rem !important;
     --_slds-c-datatable-radius-border: 0 !important;
 }
-/* Inspection tile kept visible at the bottom of the page while the results card is scrolled
-   (wrapper transparent to let the table appear next to a narrowed tile) */
-.inspectTile {
+.sfpegTableWrapper {
+    height: 60vh;
+}
+/* Inspection tile kept visible at the bottom of the page while the results card is scrolled,
+   via a zero height anchor (no page height consumed below the results table) */
+.inspectAnchor {
     position: sticky;
     bottom: 0;
+    height: 0;
     z-index: 1;
+}
+/* Tile wrapper overlaying the bottom of the results table from the anchor
+   (wrapper transparent to let the table appear and be used next to a narrowed tile) */
+.inspectTile {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
     pointer-events: none;
 }
 /* Tile opened on the left with a default size, resizable by the user in both directions
@@ -33,10 +45,6 @@
     --slds-c-card-color-background: transparent;
     --slds-c-card-color-border: transparent;
     --slds-c-card-shadow: none;
-}
-/* Tile title copying the value when clicked */
-.inspectTitle {
-    cursor: copy;
 }
 /* Tile drag handle (touch gestures disabled to allow dragging on touch screens) */
 .inspectHandle {
