@@ -14,13 +14,15 @@
     z-index: 1;
     pointer-events: none;
 }
-/* Tile resizable by the user in both directions (content max height released when resizing,
-   see handleInspectResize and fitInspectedValue) */
+/* Tile opened on the left with a default size, resizable by the user in both directions
+   (value area fitted to the tile height, see handleInspectResize and fitInspectedValue) */
 .inspectBox {
     pointer-events: auto;
     box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.16);
     overflow: hidden;
     resize: both;
+    width: 50vw;
+    height: 8rem;
     min-width: 15rem;
     max-width: 100%;
     min-height: 5rem;
@@ -40,9 +42,5 @@
     white-space: pre-wrap;
     word-break: break-word;
     font-family: monospace;
-    max-height: 30vh;
     overflow: auto;
-}
-.inspectBoxResized .inspectedValue {
-    max-height: none;
 }

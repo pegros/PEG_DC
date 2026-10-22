@@ -50,7 +50,8 @@ to easily reuse them later, via the **Saved Queries** selector and its associate
 * the 🗑️ _delete_ button removes the selected saved query (after confirmation)
 * the ⬇️ _download_ button downloads the whole set of saved queries as a `savedQueries.json` file
 * the ⬆️ _upload_ button upserts (by name) the saved queries contained in a JSON file
-(previously downloaded or prepared manually), invalid entries being ignored.
+(previously downloaded or prepared manually), invalid entries being ignored
+* the ✖️ _clear_ button removes all saved queries from the browser (after confirmation).
 
 The selected saved query is automatically deselected as soon as the user modifies the SQL query.
 
@@ -70,7 +71,7 @@ The JSON file format is a simple list of queries, e.g.
 
 ⚠️ Saved queries are stored in the local storage of the user's browser (for the current Org domain):
 they are neither shared between users nor between browsers / devices. The download / upload features
-may be used to transfer or share them.
+may be used to transfer or share them (e.g. downloading them before clearing them).
 
 ### Results Display
 

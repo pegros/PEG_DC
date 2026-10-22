@@ -112,4 +112,12 @@
         <shortDescription>Data360 Query Upload Queries Title</shortDescription>
         <value>Upload saved queries from JSON</value>
     </labels>
+    <labels>
+        <fullName>sfpegData360QueryClearQueriesTitle</fullName>
+        <categories>sfpegData360Query</categories>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>Data360 Query Clear Queries Title</shortDescription>
+        <value>Clear all saved queries</value>
+    </labels>
 </CustomLabels>

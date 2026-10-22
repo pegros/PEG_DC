@@ -77,6 +77,14 @@
                                                             icon-name="utility:upload"
                                                             onclick={handleUploadQueriesClick} >
                                     </lightning-button-icon>
+                                    <lightning-button-icon  variant="border-filled"
+                                                            name="clearQueries"
+                                                            title={clearQueriesTitle}
+                                                            alternative-text={clearQueriesTitle}
+                                                            icon-name="utility:clear"
+                                                            disabled={isDownloadQueriesDisabled}
+                                                            onclick={handleClearQueriesClick} >
+                                    </lightning-button-icon>
                                 </lightning-button-group>
                                 <!-- hidden file input opened by the upload button -->
                                 <input  type="file"

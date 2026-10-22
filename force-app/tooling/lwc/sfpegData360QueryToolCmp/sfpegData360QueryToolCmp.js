@@ -51,6 +51,7 @@ import LABEL_SAVE_QUERY_TITLE from '@salesforce/label/c.sfpegData360QuerySaveQue
 import LABEL_DELETE_QUERY_TITLE from '@salesforce/label/c.sfpegData360QueryDeleteQueryTitle';
 import LABEL_DOWNLOAD_QUERIES_TITLE from '@salesforce/label/c.sfpegData360QueryDownloadQueriesTitle';
 import LABEL_UPLOAD_QUERIES_TITLE from '@salesforce/label/c.sfpegData360QueryUploadQueriesTitle';
+import LABEL_CLEAR_QUERIES_TITLE from '@salesforce/label/c.sfpegData360QueryClearQueriesTitle';
 
 // Synthetic row key (Data360 query results have no guaranteed unique column)
 const ROW_KEY = '_sfpegRowKey';
@@ -109,6 +110,7 @@ export default class SfpegData360QueryToolCmp extends LightningElement {
     @api deleteQueryTitle = LABEL_DELETE_QUERY_TITLE;  // Title of the delete saved query button
     @api downloadQueriesTitle = LABEL_DOWNLOAD_QUERIES_TITLE;  // Title of the saved queries download button
     @api uploadQueriesTitle = LABEL_UPLOAD_QUERIES_TITLE;  // Title of the saved queries upload button
+    @api clearQueriesTitle = LABEL_CLEAR_QUERIES_TITLE;  // Title of the clear all saved queries button
     @api isDebug = false;   // Merge Debug mode activation
 
     //----------------------------------------------------------------
@@ -338,6 +340,29 @@ export default class SfpegData360QueryToolCmp extends LightningElement {
         if (this.isDebug) console.log('handleDeleteQueryClick: END with #queries ',this.savedQueries.length);
     }
 
+    async handleClearQueriesClick(event) {
+        if (this.isDebug) console.log('handleClearQueriesClick: START with #queries ',this.savedQueries.length);
+        const queryCount = this.savedQueries.length;
+        const doClear = await LightningConfirm.open({
+            label: this.clearQueriesTitle,
+            message: 'Delete all ' + queryCount + ' saved queries from the browser?',
+            theme: 'warning'
+        });
+        if (!doClear) {
+            if (this.isDebug) console.log('handleClearQueriesClick: END / clearing cancelled');
+            return;
+        }
+        if (this.storeSavedQueries([])) {
+            this.selectedQueryName = null;
+            this.dispatchEvent(new ShowToastEvent({
+                title: 'Saved queries cleared',
+                message: queryCount + ' saved queries deleted.',
+                variant: 'success'
+            }));
+        }
+        if (this.isDebug) console.log('handleClearQueriesClick: END with #queries ',this.savedQueries.length);
+    }
+
     handleDownloadQueriesClick(event) {
         if (this.isDebug) console.log('handleDownloadQueriesClick: START with #queries ',this.savedQueries.length);
         try {
@@ -464,8 +489,8 @@ export default class SfpegData360QueryToolCmp extends LightningElement {
         this.inspectedCell = null;
     }
 
-    // Default max height of the tile content released at first interaction (e.g. resize handle drag),
-    // current tile size being kept as explicit size to avoid any jump (and kept when other cells are inspected)
+    // Current tile size kept as explicit size at first interaction (e.g. resize handle drag)
+    // to avoid any jump (and kept when other cells are inspected)
     handleInspectResize(event) {
         const boxElement = this.refs.inspectBox;
         if (!boxElement || boxElement.classList.contains('inspectBoxResized')) return;
@@ -650,12 +675,12 @@ export default class SfpegData360QueryToolCmp extends LightningElement {
         if (this.isDebug) console.log('applyInspectLayout: layout applied ',JSON.stringify(this.inspectLayout));
     }
 
-    // Fits the value area height to the space remaining at the bottom of a user sized tile
+    // Fits the value area height to the space remaining at the bottom of the (default or user sized) tile
     // (value area being nested within the lightning-tile internal layout, out of reach of CSS flex sizing)
     fitInspectedValue() {
         const boxElement = this.refs?.inspectBox;
         const valueElement = this.refs?.inspectedValue;
-        if (!boxElement || !valueElement || !boxElement.classList.contains('inspectBoxResized')) return;
+        if (!boxElement || !valueElement) return;
         const boxStyle = getComputedStyle(boxElement);
         const bottomLimit = boxElement.getBoundingClientRect().bottom
             - parseFloat(boxStyle.paddingBottom) - parseFloat(boxStyle.borderBottomWidth);
