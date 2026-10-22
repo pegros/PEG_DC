@@ -9,7 +9,7 @@
                 <template lwc:if={isCollapsed}>
                     <lightning-button   class="slds-var-m-right_x-small"
                                         label={queryButtonLabel}
-                                        variant="brand"
+                                        variant="border-filled"
                                         name="queryButton"
                                         lwc:ref="queryButton"
                                         title={queryButtonTitle}
@@ -145,7 +145,7 @@
                             icon-name="standard:table">
                 
                 <template lwc:if={hasError}>
-                    <div    class="slds-media slds-media_center slds-var-p-horizontal_medium slds-var-m-bottom_small">
+                    <div    class="slds-media slds-media_center slds-var-p-horizontal_large slds-var-m-bottom_small">
                         <div    class="slds-media__figure">
                             <lightning-icon icon-name="utility:error"
                                             size="x-small"
