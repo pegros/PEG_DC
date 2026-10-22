@@ -35,12 +35,14 @@ import inspectableCellTemplate from './inspectableCell.html';
 export default class SfpegData360DatatableCmp extends LightningDatatable {
 
     // 'inspectable' cells display a formatted value (as per displayType: text, number, date-local or date)
-    // and dispatch a 'cellinspect' event (with column label and raw value) when clicked
+    // and dispatch a 'cellinspect' event (with column label and raw value) when clicked,
+    // their text being wrapped or truncated as per wrapText (column 'Wrap text' / 'Clip text' header action
+    // to be propagated by the parent component, the datatable wrapText not being reliably passed to custom cells)
     static customTypes = {
         inspectable: {
             template: inspectableCellTemplate,
             standardCellLayout: true,
-            typeAttributes: ['label', 'displayType']
+            typeAttributes: ['label', 'displayType', 'wrapText']
         }
     };
 }

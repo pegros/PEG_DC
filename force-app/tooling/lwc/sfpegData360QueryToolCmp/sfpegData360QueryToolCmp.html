@@ -241,6 +241,8 @@
                                                             sorted-direction={sortedDirection}
                                                             default-sort-direction="asc"
                                                             onsort={handleSort}
+                                                            onheaderaction={handleHeaderAction}
+                                                            onresize={handleColumnResize}
                                                             enable-infinite-loading={hasMoreRows}
                                                             onloadmore={handleLoadMore}
                                                             hide-checkbox-column="true"
@@ -254,7 +256,7 @@
                     <template lwc:if={inspectedCell}>
                         <div class="inspectAnchor">
                             <div class="inspectTile slds-var-p-horizontal_medium slds-var-p-vertical_small">
-                                <div    class="inspectBox slds-box slds-p-top_none slds-p-horizontal_none slds-p-bottom_x-small slds-theme_shade"
+                                <div    class="inspectBox slds-box slds-p-top_none slds-p-horizontal_none slds-p-bottom_x-small slds-theme_info"
                                         lwc:ref="inspectBox"
                                         onpointerdown={handleInspectResize}>
                                     <lightning-card class="inspectCard">
@@ -296,7 +298,7 @@
                                                 </lightning-button-icon>
                                             </lightning-button-group>
                                         </div>
-                                        <pre    class="inspectedValue slds-var-p-horizontal_medium"
+                                        <pre    class="inspectedValue slds-var-m-around_small slds-var-p-around_medium slds-theme_default"
                                                 lwc:ref="inspectedValue">{inspectedContent}</pre>
                                     </lightning-card>
                                 </div>

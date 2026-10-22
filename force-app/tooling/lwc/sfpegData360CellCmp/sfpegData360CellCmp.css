@@ -1,3 +1,15 @@
+/* Block display constrained to the cell width (for both truncation and wrapping), min width
+   reset to let the element shrink within the flex layout of the datatable standard cell */
+:host {
+    display: block;
+    min-width: 0;
+    max-width: 100%;
+}
+/* Wrapped value (long texts without spaces, e.g. JSON or Ids, being broken anywhere) */
+.cellWrapped {
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
 /* Whole cell content clickable (min height keeping empty cells clickable) */
 .cellValue {
     cursor: pointer;

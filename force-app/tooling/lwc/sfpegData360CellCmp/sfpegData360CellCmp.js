@@ -39,6 +39,7 @@ export default class SfpegData360CellCmp extends LightningElement {
     @api value;         // raw value of the cell
     @api label;         // label of the cell column
     @api displayType;   // display type of the value ('text', 'number', 'date-local' or 'date')
+    @api wrapText;      // column text wrapping activation (vs truncation), as set via the column header actions
 
     //----------------------------------------------------------------
     // Custom Getters
@@ -51,6 +52,9 @@ export default class SfpegData360CellCmp extends LightningElement {
     }
     get isDatetime() {
         return this.displayType === 'date';
+    }
+    get cellClass() {
+        return 'cellValue ' + (this.wrapText ? 'slds-hyphenate cellWrapped' : 'slds-truncate');
     }
     get textValue() {
         if ((this.value === null) || (this.value === undefined)) return '';

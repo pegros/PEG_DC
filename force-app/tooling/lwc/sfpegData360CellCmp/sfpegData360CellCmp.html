@@ -1,5 +1,6 @@
 <template>
-    <div class="cellValue slds-truncate" onclick={handleClick}>
+    <!-- value truncated or wrapped as per the 'Clip text' / 'Wrap text' column setting of the datatable -->
+    <div class={cellClass} onclick={handleClick}>
         <template lwc:if={isNumber}>
             <lightning-formatted-number value={value}></lightning-formatted-number>
         </template>

@@ -137,6 +137,7 @@ export default class SfpegData360QueryToolCmp extends LightningElement {
     isFiltered = false;     // search filter currently applied on the result list
     tableInstances = [{key: 0}];    // single datatable instance, key changed to re-create it (scroll reset)
     resultColumns = [];
+    columnWidths;           // current widths of the result columns (kept when column definitions are updated)
     inspectedCell;          // last clicked result cell ({label, value}) displayed in the inspection tile
     inspectDrag;            // ongoing horizontal drag of the inspection tile ({startX, startOffset, maxOffset})
     inspectLayout;          // last user defined layout of the inspection tile ({width, height, offset}), restored at reopening
@@ -439,6 +440,7 @@ export default class SfpegData360QueryToolCmp extends LightningElement {
         .then(result => {
             if (this.isDebug) console.log('handleQueryButtonClick: result received ',JSON.stringify(result));
             this.resultColumns = (result.columns || []).map(item => this.buildColumn(item));
+            this.columnWidths = null;
             const datetimeFields = this.resultColumns.filter(item => item.typeAttributes.displayType === 'date').map(item => item.fieldName);
             this.sortedBy = null;
             this.sortedDirection = null;
@@ -536,6 +538,30 @@ export default class SfpegData360QueryToolCmp extends LightningElement {
             }));
         })
         .catch(error => this.handleCopyError(error));
+    }
+
+    // 'Wrap text' / 'Clip text' column header actions propagated to the column cells via their wrapText
+    // type attribute (column widths being kept as initial widths when the column definitions are updated)
+    handleHeaderAction(event) {
+        const actionName = event.detail.action?.name;
+        if ((actionName !== 'wrapText') && (actionName !== 'clipText')) return;
+        const fieldName = event.detail.columnDefinition?.fieldName;
+        const isWrapped = (actionName === 'wrapText');
+        if (this.isDebug) console.log('handleHeaderAction: START with ' + actionName + ' on column ',fieldName);
+        this.resultColumns = this.resultColumns.map((item, index) => {
+            const column = {...item, typeAttributes: {...item.typeAttributes}};
+            if (this.columnWidths?.[index]) column.initialWidth = this.columnWidths[index];
+            if (item.fieldName === fieldName) {
+                column.wrapText = isWrapped;
+                column.typeAttributes.wrapText = isWrapped;
+            }
+            return column;
+        });
+        if (this.isDebug) console.log('handleHeaderAction: END with column widths ',JSON.stringify(this.columnWidths));
+    }
+
+    handleColumnResize(event) {
+        this.columnWidths = event.detail.columnWidths;
     }
 
     handleSort(event) {
