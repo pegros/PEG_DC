@@ -79,6 +79,8 @@ const NUMBER_TYPES = ['BIGINT','DECIMAL','DOUBLE','FLOAT','FLOAT4','FLOAT8','INT
 // Data360 column types displayed as dates / datetimes in the datatable
 const DATE_TYPES = ['DATE'];
 const DATETIME_TYPES = ['TIMESTAMP','TIMESTAMPTZ'];
+// Max recursion depth when deep parsing JSON strings nested within JSON values
+const MAX_UNWRAP_DEPTH = 12;
 
 
 export default class SfpegData360QueryToolCmp extends LightningElement {
@@ -143,6 +145,7 @@ export default class SfpegData360QueryToolCmp extends LightningElement {
     inspectLayout;          // last user defined layout of the inspection tile ({width, height, offset}), restored at reopening
     inspectObserver;        // observer of the inspection tile size (to fit its value area in it)
     observedBox;            // inspection tile element currently observed
+    showRawInspected = false;   // inspection tile displaying the raw original value instead of the reformatted one
     outputFormat = DEFAULT_FORMAT;  // format applied to copy / download operations
     savedQueries = [];      // queries saved in the browser local storage (sorted by name)
     selectedQueryName;      // name of the saved query last selected / saved
@@ -156,7 +159,12 @@ export default class SfpegData360QueryToolCmp extends LightningElement {
             + (this.isFiltered ? this.filteredList.length + ' / ' + totalCount : totalCount) + ')';
     }
     get inspectedContent() {
-        return this.formatInspectedValue(this.inspectedCell?.value);
+        return this.showRawInspected
+            ? this.formatRawValue(this.inspectedCell?.value)
+            : this.formatInspectedValue(this.inspectedCell?.value);
+    }
+    get inspectFormatTitle() {
+        return this.showRawInspected ? 'Show formatted value' : 'Show raw value';
     }
     get expandCollapseIcon() {
         return this.isCollapsed ? 'utility:expand_all' : 'utility:collapse_all';
@@ -527,6 +535,11 @@ export default class SfpegData360QueryToolCmp extends LightningElement {
         this.inspectDrag = null;
     }
 
+    handleInspectFormatToggle(event) {
+        this.showRawInspected = !this.showRawInspected;
+        if (this.isDebug) console.log('handleInspectFormatToggle: raw display set to ',this.showRawInspected);
+    }
+
     handleInspectCopy(event) {
         if (this.isDebug) console.log('handleInspectCopy: START for column ',this.inspectedCell?.label);
         navigator.clipboard.writeText(this.inspectedContent)
@@ -849,20 +862,46 @@ export default class SfpegData360QueryToolCmp extends LightningElement {
     }
 
     // Formats a cell value for the inspection tile: objects and JSON strings (objects / arrays)
-    // pretty printed, other values as raw text (null as empty)
+    // pretty printed after deep parsing of nested JSON strings, other values as raw text (null as empty)
     formatInspectedValue(value) {
         if ((value === null) || (value === undefined)) return '';
-        if (typeof value === 'object') return JSON.stringify(value, null, 2);
+        if (typeof value === 'object') return JSON.stringify(this.deepParseJson(value), null, 2);
         const valueStr = String(value);
-        if (/^\s*[[{]/.test(valueStr)) {
-            try {
-                return JSON.stringify(JSON.parse(valueStr), null, 2);
-            }
-            catch (error) {
-                // not valid JSON, displayed as is
+        const parsed = this.deepParseJson(valueStr);
+        return (typeof parsed === 'string') ? valueStr : JSON.stringify(parsed, null, 2);
+    }
+
+    // Formats a cell value as its raw original content (objects serialized without reformatting, null as empty)
+    formatRawValue(value) {
+        if ((value === null) || (value === undefined)) return '';
+        return (typeof value === 'object') ? JSON.stringify(value) : String(value);
+    }
+
+    // Recursively parses string values plausibly containing JSON objects / arrays (e.g. double-encoded
+    // payloads with escaped JSON), recursion being bounded by MAX_UNWRAP_DEPTH
+    deepParseJson(node, depth = 0) {
+        if (depth >= MAX_UNWRAP_DEPTH) return node;
+        if (Array.isArray(node)) return node.map((item) => this.deepParseJson(item, depth + 1));
+        if ((node !== null) && (typeof node === 'object')) {
+            const output = {};
+            Object.keys(node).forEach((key) => {
+                output[key] = this.deepParseJson(node[key], depth + 1);
+            });
+            return output;
+        }
+        if (typeof node === 'string') {
+            const trimmed = node.trim();
+            if ((trimmed.startsWith('{') && trimmed.endsWith('}'))
+                || (trimmed.startsWith('[') && trimmed.endsWith(']'))) {
+                try {
+                    return this.deepParseJson(JSON.parse(trimmed), depth + 1);
+                }
+                catch (error) {
+                    // not valid JSON, kept as is
+                }
             }
         }
-        return valueStr;
+        return node;
     }
 
     // Normalizes a Data360 timestamp value into an ISO 8601 string reliably parsed by all browsers:

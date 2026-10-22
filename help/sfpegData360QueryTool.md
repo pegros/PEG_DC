@@ -93,15 +93,21 @@ The search input in the card header enables to filter the results locally
 
 Clicking on any cell of the datatable opens an inspection tile, sticky at the bottom of the page
 (and overlaying the bottom of the results table), displaying the full value of the cell with its column label:
-* JSON content (objects, arrays or JSON strings) is pretty printed
+* JSON content (objects, arrays or JSON strings) is pretty printed, JSON strings nested
+within it (e.g. escaped JSON in double-encoded payloads) being deep parsed and pretty printed as well
 * long texts are wrapped instead of being truncated, line breaks being preserved.
+
+A _raw / formatted_ toggle button in the tile header enables to switch between this
+reformatted display and the raw original value of the cell (the selected mode being
+kept when inspecting other cells).
 
 Clicking on another cell updates the tile content, clicking on an empty cell closes it.
 
 The tile may be:
 * resized (bottom right corner) horizontally and vertically
 * moved left or right via its drag handle (when narrower than the results card)
-* closed or its value copied to the clipboard via its header buttons.
+* closed or its value copied to the clipboard via its header buttons
+(the value being copied as currently displayed, i.e. raw or reformatted).
 
 Its layout (size and position) is kept when the tile is closed and redisplayed
 (until the page is reloaded).

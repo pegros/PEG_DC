@@ -256,7 +256,7 @@
                     <template lwc:if={inspectedCell}>
                         <div class="inspectAnchor">
                             <div class="inspectTile slds-var-p-horizontal_medium slds-var-p-vertical_small">
-                                <div    class="inspectBox slds-box slds-p-top_none slds-p-horizontal_none slds-p-bottom_x-small slds-theme_info"
+                                <div    class="inspectBox slds-box slds-p-top_none slds-p-horizontal_none slds-p-bottom_x-small slds-theme_shade"
                                         lwc:ref="inspectBox"
                                         onpointerdown={handleInspectResize}>
                                     <lightning-card class="inspectCard">
@@ -281,6 +281,15 @@
                                         </div>
                                         <div    slot="actions"
                                                 class="inspectActions">
+                                            <lightning-button-icon-stateful variant="border-filled"
+                                                                            class="slds-var-m-right_x-small"
+                                                                            size="small"
+                                                                            title={inspectFormatTitle}
+                                                                            alternative-text={inspectFormatTitle}
+                                                                            icon-name="utility:slack_code"
+                                                                            selected={showRawInspected}
+                                                                            onclick={handleInspectFormatToggle} >
+                                            </lightning-button-icon-stateful>
                                             <lightning-button-group>
                                                 <lightning-button-icon  variant="border-filled"
                                                                         size="small"
