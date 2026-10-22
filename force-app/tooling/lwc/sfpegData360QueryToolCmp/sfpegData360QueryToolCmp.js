@@ -74,11 +74,6 @@ const DEFAULT_FORMAT = 'csv';
 const SAVED_QUERIES_KEY = 'sfpegData360QueryTool.savedQueries';
 // File name of the saved queries download
 const SAVED_QUERIES_FILE_NAME = 'savedQueries.json';
-// Actions of the inspection tile
-const INSPECT_ACTIONS = [
-    {label: 'Copy value', value: 'copy', iconName: 'utility:copy_to_clipboard'},
-    {label: 'Close', value: 'close', iconName: 'utility:close'}
-];
 // Data360 column types displayed as numbers in the datatable (others as text)
 const NUMBER_TYPES = ['BIGINT','DECIMAL','DOUBLE','FLOAT','FLOAT4','FLOAT8','INTEGER','NUMBER','NUMERIC','REAL','SMALLINT','TINYINT'];
 // Data360 column types displayed as dates / datetimes in the datatable
@@ -145,7 +140,6 @@ export default class SfpegData360QueryToolCmp extends LightningElement {
     inspectedCell;          // last clicked result cell ({label, value}) displayed in the inspection tile
     inspectDrag;            // ongoing horizontal drag of the inspection tile ({startX, startOffset, maxOffset})
     inspectLayout;          // last user defined layout of the inspection tile ({width, height, offset}), restored at reopening
-    inspectActions = INSPECT_ACTIONS;   // actions menu of the inspection tile
     inspectObserver;        // observer of the inspection tile size (to fit its value area in it)
     observedBox;            // inspection tile element currently observed
     outputFormat = DEFAULT_FORMAT;  // format applied to copy / download operations
@@ -494,8 +488,8 @@ export default class SfpegData360QueryToolCmp extends LightningElement {
     handleInspectResize(event) {
         const boxElement = this.refs.inspectBox;
         if (!boxElement || boxElement.classList.contains('inspectBoxResized')) return;
-        // tile title and actions menu (internal to the lightning-tile) not considered as a layout customisation
-        if (event.target.tagName === 'LIGHTNING-TILE') return;
+        // tile title, action buttons and card internal header not considered as a layout customisation
+        if (event.target.tagName === 'LIGHTNING-CARD' || event.target.closest('.inspectTitle, .inspectActions')) return;
         boxElement.style.height = boxElement.offsetHeight + 'px';
         boxElement.style.width = boxElement.offsetWidth + 'px';
         boxElement.classList.add('inspectBoxResized');
@@ -529,20 +523,6 @@ export default class SfpegData360QueryToolCmp extends LightningElement {
         if (!this.inspectDrag) return;
         if (this.isDebug) console.log('handleInspectDragEnd: drag ended at offset ',this.refs.inspectBox.style.marginLeft);
         this.inspectDrag = null;
-    }
-
-    handleInspectAction(event) {
-        if (this.isDebug) console.log('handleInspectAction: START with action ',event.detail.action.value);
-        switch (event.detail.action.value) {
-            case 'copy':
-                this.handleInspectCopy(event);
-                break;
-            case 'close':
-                this.handleInspectClose(event);
-                break;
-            default:
-                console.warn('handleInspectAction: unsupported action ',event.detail.action.value);
-        }
     }
 
     handleInspectCopy(event) {
@@ -676,7 +656,7 @@ export default class SfpegData360QueryToolCmp extends LightningElement {
     }
 
     // Fits the value area height to the space remaining at the bottom of the (default or user sized) tile
-    // (value area being nested within the lightning-tile internal layout, out of reach of CSS flex sizing)
+    // (value area being nested within the lightning-card internal layout, out of reach of CSS flex sizing)
     fitInspectedValue() {
         const boxElement = this.refs?.inspectBox;
         const valueElement = this.refs?.inspectedValue;

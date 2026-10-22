@@ -101,7 +101,8 @@ Clicking on another cell updates the tile content, clicking on an empty cell clo
 The tile may be:
 * resized (bottom right corner) horizontally and vertically
 * moved left or right via its drag handle (when narrower than the results card)
-* closed or its value copied to the clipboard via its actions menu.
+* closed or its value copied to the clipboard via its header buttons
+(clicking on the column label also copying the value).
 
 Its layout (size and position) is kept when the tile is closed and redisplayed
 (until the page is reloaded).

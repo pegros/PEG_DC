@@ -203,7 +203,7 @@
                     </div>
 
                     <template lwc:if={isMaskingApplied}>
-                        <div    class="slds-media slds-media_center slds-var-p-horizontal_medium slds-var-m-bottom_medium">
+                        <div    class="slds-media slds-media_center slds-var-p-horizontal_large slds-var-m-bottom_medium">
                             <div    class="slds-media__figure">
                                 <lightning-icon icon-name="utility:warning"
                                                 size="x-small"
@@ -216,7 +216,7 @@
                         </div>
                     </template>
                     <template lwc:if={isTruncated}>
-                        <div    class="slds-media slds-media_center slds-var-p-horizontal_medium slds-var-m-bottom_medium">
+                        <div    class="slds-media slds-media_center slds-var-p-horizontal_large slds-var-m-bottom_medium">
                             <div    class="slds-media__figure">
                                 <lightning-icon icon-name="utility:warning"
                                                 size="x-small"
@@ -252,29 +252,53 @@
                     <!-- inspection tile displaying the full content of the last clicked cell (sticky at the bottom of the page) -->
                     <template lwc:if={inspectedCell}>
                         <div class="inspectTile slds-var-p-horizontal_medium slds-var-p-vertical_small">
-                            <div    class="inspectBox slds-box slds-box_small slds-theme_shade"
+                            <div    class="inspectBox slds-box slds-p-top_none slds-p-horizontal_none slds-p-bottom_x-small slds-theme_shade"
                                     lwc:ref="inspectBox"
                                     onpointerdown={handleInspectResize}>
-                                <lightning-tile type="media"
-                                                label={inspectedCell.label}
-                                                actions={inspectActions}
-                                                onactiontriggered={handleInspectAction}>
-                                    <!-- drag handle to move the (narrowed) tile left or right -->
-                                    <div    slot="media"
-                                            class="inspectHandle"
-                                            title="Drag to move"
-                                            onpointerdown={handleInspectDragStart}
-                                            onpointermove={handleInspectDragMove}
-                                            onpointerup={handleInspectDragEnd}
-                                            onpointercancel={handleInspectDragEnd}>
-                                        <lightning-icon icon-name="utility:drag_and_drop"
-                                                        size="x-small"
-                                                        alternative-text="Drag to move">
-                                        </lightning-icon>
+                                <lightning-card class="inspectCard">
+                                    <div    slot="title"
+                                            class="slds-media slds-media_center">
+                                        <!-- drag handle to move the (narrowed) tile left or right -->
+                                        <div    class="inspectHandle slds-media__figure"
+                                                title="Drag to move"
+                                                onpointerdown={handleInspectDragStart}
+                                                onpointermove={handleInspectDragMove}
+                                                onpointerup={handleInspectDragEnd}
+                                                onpointercancel={handleInspectDragEnd}>
+                                            <lightning-icon icon-name="utility:drag_and_drop"
+                                                            size="x-small"
+                                                            alternative-text="Drag to move">
+                                            </lightning-icon>
+                                        </div>
+                                        <!-- column label, copying the value when clicked -->
+                                        <div    class="inspectTitle slds-media__body slds-truncate"
+                                                title="Click to copy the value"
+                                                onclick={handleInspectCopy}>
+                                            {inspectedCell.label}
+                                        </div>
                                     </div>
-                                    <pre    class="inspectedValue"
+                                    <div    slot="actions"
+                                            class="inspectActions">
+                                        <lightning-button-group>
+                                            <lightning-button-icon  variant="border-filled"
+                                                                    size="small"
+                                                                    title="Copy value"
+                                                                    alternative-text="Copy value"
+                                                                    icon-name="utility:copy_to_clipboard"
+                                                                    onclick={handleInspectCopy} >
+                                            </lightning-button-icon>
+                                            <lightning-button-icon  variant="border-filled"
+                                                                    size="small"
+                                                                    title="Close"
+                                                                    alternative-text="Close"
+                                                                    icon-name="utility:close"
+                                                                    onclick={handleInspectClose} >
+                                            </lightning-button-icon>
+                                        </lightning-button-group>
+                                    </div>
+                                    <pre    class="inspectedValue slds-var-p-horizontal_medium"
                                             lwc:ref="inspectedValue">{inspectedContent}</pre>
-                                </lightning-tile>
+                                </lightning-card>
                             </div>
                         </div>
                     </template>
