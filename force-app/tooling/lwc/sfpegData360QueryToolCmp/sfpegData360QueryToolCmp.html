@@ -231,7 +231,7 @@
 
                     <!-- keyed single-item iteration: changing the key re-creates the datatable (and resets its scroll to top) -->
                     <template for:each={tableInstances} for:item="item">
-                        <div key={item.key} class="sfpegTableWrapper">
+                        <div key={item.key} class="sfpegTableWrapper slds-var-p-bottom_small">
                             <c-sfpeg-data360-datatable-cmp  class="sfpegTable"
                                                             key-field={keyField}
                                                             data={displayedList}
